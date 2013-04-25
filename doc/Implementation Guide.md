@@ -17,6 +17,10 @@ Replace '3 months' with your customer-defined retention period.
 
 The table EncryptedCards is the only location where encrypted card data is stored.
 
+The deleted encrypted CVC codes might remain on disk for a while after deletion,
+due to the design of PostgreSQL. To ensure they are erased, do a VACUUM FULL
+ever 10 minutes or so.
+
 ## 3. Logging
 
 The logging settings must not be disabled.
