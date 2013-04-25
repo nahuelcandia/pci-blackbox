@@ -5,7 +5,8 @@ sudo apt-get install cpanminus build-essential postgresql-9.1 \
 postgresql-contrib-9.1 postgresql-plperl-9.1 libplack-perl libdbd-pg-perl \
 libjson-perl libmodule-install-perl libtest-exception-perl \
 libapache2-mod-perl2 apache2-mpm-prefork git-core libtest-deep-perl \
-libfile-slurp-perl libwww-curl-perl git libdbix-connector-perl
+libfile-slurp-perl libwww-curl-perl git libdbix-connector-perl \
+postgresql-9.1-pgmemcache memcached
 cpanm --sudo DBIx::Pg::CallFunction JSON::RPC::Simple::Client
 git clone git://github.com/joelonsql/pci-blackbox.git
 # echo "INSERT INTO MerchantAccounts (PSP, MerchantAccount, URL, Username, Password, PCIBlackBoxURL) \

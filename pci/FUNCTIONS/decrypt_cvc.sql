@@ -8,7 +8,13 @@ _CVCData bytea;
 _OK boolean;
 BEGIN
 _CVCKeyHash := digest(_CVCKey,'sha512');
-DELETE FROM EncryptedCVCs WHERE CVCKeyHash = _CVCKeyHash RETURNING CVCData INTO STRICT _CVCData;
+
+PERFORM memcache_server_add('localhost');
+
+_CVCData := decode(memcache_get(encode(_CVCKeyHash,'hex')),'hex');
+
+PERFORM memcache_delete(encode(_CVCKeyHash,'hex'));
+
 CardCVC := pgp_sym_decrypt(_CVCData,_CVCKey);
 RETURN;
 END;

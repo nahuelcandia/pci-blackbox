@@ -6,6 +6,7 @@ DECLARE
 _CVCKeyHash bytea;
 _CVCData bytea;
 _OK boolean;
+_Expire interval := '10 minutes'::interval;
 BEGIN
 
 IF _CardCVC ~ '^[0-9]{3}$' THEN
@@ -18,7 +19,8 @@ CVCKey := encode(gen_random_bytes(32),'hex'); -- 32 bytes = 256 bits
 _CVCKeyHash := digest(CVCKey,'sha512');
 _CVCData := pgp_sym_encrypt(_CardCVC,CVCKey,'cipher-algo=aes256');
 
-INSERT INTO EncryptedCVCs (CVCKeyHash,CVCData) VALUES (_CVCKeyHash, _CVCData) RETURNING TRUE INTO STRICT _OK;
+PERFORM memcache_server_add('localhost');
+PERFORM memcache_set(encode(_CVCKeyHash,'hex'),encode(_CVCData,'hex'),_Expire);
 
 RETURN;
 END;

@@ -63,6 +63,7 @@ BEGIN;
 CREATE LANGUAGE plperlu;
 CREATE EXTENSION pgcrypto;
 CREATE EXTENSION "uuid-ossp";
+CREATE EXTENSION pgmemcache;
 
 -- plperlu functions, can only be created by superusers
 \i pci/FUNCTIONS/card_to_json.sql
@@ -74,7 +75,6 @@ SET ROLE TO pci;
 \i pci/TABLES/hashsalts.sql
 \i pci/TABLES/cardnumberreferences.sql
 \i pci/TABLES/encryptedcards.sql
-\i pci/TABLES/encryptedcvcs.sql
 \i pci/FUNCTIONS/encrypt_card.sql
 \i pci/FUNCTIONS/encrypt_cvc.sql
 \i pci/FUNCTIONS/authorise_payment_request.sql
