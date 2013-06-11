@@ -129,3 +129,12 @@ my $request_3d = {
 };
 my $response_3d = $nonpci->authorise_3d($request_3d);
 like($response_3d, qr/^http/, 'Authorise_3D');
+
+
+
+
+# Test 7, Capture
+my $request_capture = {
+    authoriserequestid => $authorise_request->{authoriserequestid}
+};
+ok($nonpci->capture($request_capture), 'Capture');

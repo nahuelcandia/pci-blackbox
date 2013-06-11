@@ -38,10 +38,12 @@ SET ROLE TO nonpci;
 \i nonpci/TABLES/cards.sql
 \i nonpci/TABLES/authoriserequests.sql
 \i nonpci/TABLES/authorise3drequests.sql
+\i nonpci/TABLES/capturerequests.sql
 \i nonpci/FUNCTIONS/get_merchant_account.sql
 \i nonpci/FUNCTIONS/store_card_key.sql
 \i nonpci/FUNCTIONS/authorise.sql
 \i nonpci/FUNCTIONS/authorise_3d.sql
+\i nonpci/FUNCTIONS/capture.sql
 \i nonpci/FUNCTIONS/capture_payment_request.sql
 \i nonpci/FUNCTIONS/format_adyen_capture_request.sql
 \i nonpci/FUNCTIONS/parse_adyen_capture_response.sql
