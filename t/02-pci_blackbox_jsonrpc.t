@@ -149,7 +149,7 @@ ok($nonpci->capture($request_capture), 'Capture');
 
 
 # Test 8, Refund
-ok($nonpci->capture($request_capture), 'Refund');
+ok($nonpci->refund($request_capture), 'Refund');
 
 
 
