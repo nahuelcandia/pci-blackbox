@@ -11,7 +11,7 @@ use JSON qw(from_json to_json);
 use DBI;
 use DBIx::Pg::CallFunction;
 
-plan tests => 6;
+plan tests => 7;
 
 my $nonpci = JSON::RPC::Simple::Client->new('https://localhost:30001/nonpci');
 my $pci    = JSON::RPC::Simple::Client->new('https://localhost:30002/pci');
