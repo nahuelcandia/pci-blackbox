@@ -11,7 +11,7 @@ use Data::Dumper;
 use LWP::UserAgent;
 use File::Slurp qw(write_file);
 
-plan tests => 8;
+plan tests => 9;
 
 # Connect to the isolated PCI compliant pci-blackbox
 my $dbh_pci = DBI->connect("dbi:Pg:dbname=pci", '', '', {pg_enable_utf8 => 1, PrintError => 0});
@@ -188,7 +188,25 @@ cmp_deeply(
     'Authorise_Payment_Request_3D'
 );
 
-
+# Test 9, Capture_Payment_Request
+my $capture_response = $nonpci->capture_payment_request({
+    _psp                     => $merchant_account->{psp},
+    _merchantaccount         => $merchant_account->{merchantaccount},
+    _url                     => $merchant_account->{url},
+    _username                => $merchant_account->{username},
+    _password                => $merchant_account->{password},
+    _currencycode            => $currencycode,
+    _paymentamount           => $paymentamount,
+    _pspreference            => $response_3d->{pspreference}
+});
+cmp_deeply(
+    $capture_response,
+    {
+        'pspreference'  => re('^\d+$'),
+        'response'      => re('^.*$')
+    },
+    'Capture_Payment_Request'
+);
 
 $dbh->rollback;
 $dbh_pci->rollback;
