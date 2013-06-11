@@ -39,6 +39,7 @@ SET ROLE TO nonpci;
 \i nonpci/TABLES/authoriserequests.sql
 \i nonpci/TABLES/authorise3drequests.sql
 \i nonpci/TABLES/capturerequests.sql
+\i nonpci/TABLES/cancelrequests.sql
 \i nonpci/FUNCTIONS/get_merchant_account.sql
 \i nonpci/FUNCTIONS/store_card_key.sql
 \i nonpci/FUNCTIONS/authorise.sql
@@ -47,6 +48,10 @@ SET ROLE TO nonpci;
 \i nonpci/FUNCTIONS/capture_payment_request.sql
 \i nonpci/FUNCTIONS/format_adyen_capture_request.sql
 \i nonpci/FUNCTIONS/parse_adyen_capture_response.sql
+\i nonpci/FUNCTIONS/cancel.sql
+\i nonpci/FUNCTIONS/cancel_payment_request.sql
+\i nonpci/FUNCTIONS/format_adyen_cancel_request.sql
+\i nonpci/FUNCTIONS/parse_adyen_cancel_response.sql
 
 -- This file needs to be created manually:
 \i nonpci/populate.sql

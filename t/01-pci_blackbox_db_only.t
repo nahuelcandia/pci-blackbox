@@ -21,8 +21,6 @@ my $pci = DBIx::Pg::CallFunction->new($dbh_pci);
 my $dbh = DBI->connect("dbi:Pg:dbname=nonpci", '', '', {pg_enable_utf8 => 1, PrintError => 0});
 my $nonpci = DBIx::Pg::CallFunction->new($dbh);
 
-
-
 # Variables used throughout the test
 my $cardnumber              = '5212345678901234';
 my $cardexpirymonth         = 06;
@@ -96,99 +94,107 @@ my $cardid = $nonpci->store_card_key({
 });
 cmp_ok($cardid,'>=',1,"Store_Card_Key");
 
+sub authorise {
 
-
-# Test 4, Authorise_Payment_Request
-my $request = {
-    _cardkey                 => $encrypted_card->{cardkey},
-    _cvckey                  => $encrypted_card->{cvckey},
-    _psp                     => $merchant_account->{psp},
-    _merchantaccount         => $merchant_account->{merchantaccount},
-    _url                     => $merchant_account->{url},
-    _username                => $merchant_account->{username},
-    _password                => $merchant_account->{password},
-    _currencycode            => $currencycode,
-    _paymentamount           => $paymentamount,
-    _reference               => $reference,
-    _shopperip               => $shopperip,
-    _shopperemail            => $shopperemail,
-    _shopperreference        => $shopperreference,
-    _http_accept             => $http_accept,
-    _http_user_agent         => $http_user_agent
-};
-my $authorise_payment_response = $pci->authorise_payment_request($request);
-cmp_deeply(
-    $authorise_payment_response,
-    {
-        'md'            => re('^[a-zA-Z0-9/+=]+$'),
-        'authcode'      => undef,
-        'pareq'         => re('^[a-zA-Z0-9/+=]+$'),
-        'issuerurl'     => re('^https://'),
-        'resultcode'    => 'RedirectShopper',
-        'pspreference'  => re('^\d+$')
-    },
-    'Authorise_Payment_Request'
-);
-
-
-
-# Test 5, HTTPS POST issuer URL, load password form
-my $ua = LWP::UserAgent->new();
-my $http_response_load_password_form = $ua->post($authorise_payment_response->{issuerurl}, {
-    PaReq   => $authorise_payment_response->{pareq},
-    TermUrl => 'https://foo.bar.com/',
-    MD      => $authorise_payment_response->{md}
-});
-ok($http_response_load_password_form->is_success, "HTTPS POST issuer URL, load password form");
+    # Test 4, Authorise_Payment_Request
+    my $request = {
+        _cardkey                 => $encrypted_card->{cardkey},
+        _cvckey                  => $encrypted_card->{cvckey},
+        _psp                     => $merchant_account->{psp},
+        _merchantaccount         => $merchant_account->{merchantaccount},
+        _url                     => $merchant_account->{url},
+        _username                => $merchant_account->{username},
+        _password                => $merchant_account->{password},
+        _currencycode            => $currencycode,
+        _paymentamount           => $paymentamount,
+        _reference               => $reference,
+        _shopperip               => $shopperip,
+        _shopperemail            => $shopperemail,
+        _shopperreference        => $shopperreference,
+        _http_accept             => $http_accept,
+        _http_user_agent         => $http_user_agent
+    };
+    my $authorise_payment_response = $pci->authorise_payment_request($request);
+    cmp_deeply(
+        $authorise_payment_response,
+        {
+            'md'            => re('^[a-zA-Z0-9/+=]+$'),
+            'authcode'      => undef,
+            'pareq'         => re('^[a-zA-Z0-9/+=]+$'),
+            'issuerurl'     => re('^https://'),
+            'resultcode'    => 'RedirectShopper',
+            'pspreference'  => re('^\d+$')
+        },
+        'Authorise_Payment_Request'
+    );
 
 
 
-# Test 6, HTTPS POST issuer URL, submit password
-my $http_response_submit_password = $ua->post('https://test.adyen.com/hpp/3d/authenticate.shtml', {
-    PaReq      => $authorise_payment_response->{pareq},
-    TermUrl    => 'https://foo.bar.com/',
-    MD         => $authorise_payment_response->{md},
-    cardNumber => $cardnumber,
-    username   => 'user',
-    password   => 'password'
-});
-ok($http_response_submit_password->is_success, "HTTPS POST issuer URL, submit password");
+    # Test 5, HTTPS POST issuer URL, load password form
+    my $ua = LWP::UserAgent->new();
+    my $http_response_load_password_form = $ua->post($authorise_payment_response->{issuerurl}, {
+        PaReq   => $authorise_payment_response->{pareq},
+        TermUrl => 'https://foo.bar.com/',
+        MD      => $authorise_payment_response->{md}
+    });
+    ok($http_response_load_password_form->is_success, "HTTPS POST issuer URL, load password form");
 
 
 
-# Test 7, HTTPS POST issuer URL, parsed PaRes
-if ($http_response_submit_password->decoded_content =~ m/<input type="hidden" name="PaRes" value="([^"]+)"/) {
-    ok(1,"HTTPS POST issuer URL, parsed PaRes");
+    # Test 6, HTTPS POST issuer URL, submit password
+    my $http_response_submit_password = $ua->post('https://test.adyen.com/hpp/3d/authenticate.shtml', {
+        PaReq      => $authorise_payment_response->{pareq},
+        TermUrl    => 'https://foo.bar.com/',
+        MD         => $authorise_payment_response->{md},
+        cardNumber => $cardnumber,
+        username   => 'user',
+        password   => 'password'
+    });
+    ok($http_response_submit_password->is_success, "HTTPS POST issuer URL, submit password");
+
+
+
+    # Test 7, HTTPS POST issuer URL, parsed PaRes
+    if ($http_response_submit_password->decoded_content =~ m/<input type="hidden" name="PaRes" value="([^"]+)"/) {
+        ok(1,"HTTPS POST issuer URL, parsed PaRes");
+    }
+    my $pares = $1;
+
+
+
+    # Test 8, Authorise_Payment_Request_3D
+    my $request_3d = {
+        _psp                     => $merchant_account->{psp},
+        _merchantaccount         => $merchant_account->{merchantaccount},
+        _url                     => $merchant_account->{url},
+        _username                => $merchant_account->{username},
+        _password                => $merchant_account->{password},
+        _http_accept             => $http_accept,
+        _http_user_agent         => $http_user_agent,
+        _md                      => $authorise_payment_response->{md},
+        _pares                   => $pares,
+        _shopperip               => $shopperip
+    };
+    my $response_3d = $pci->authorise_payment_request_3d($request_3d);
+    cmp_deeply(
+        $response_3d,
+        {
+            'pspreference'  => re('^\d+$'),
+            'resultcode'    => 'Authorised',
+            'authcode'      => re('^\d+$')
+        },
+        'Authorise_Payment_Request_3D'
+    );
+
+    return $response_3d;
+
 }
-my $pares = $1;
 
 
 
-# Test 8, Authorise_Payment_Request_3D
-my $request_3d = {
-    _psp                     => $merchant_account->{psp},
-    _merchantaccount         => $merchant_account->{merchantaccount},
-    _url                     => $merchant_account->{url},
-    _username                => $merchant_account->{username},
-    _password                => $merchant_account->{password},
-    _http_accept             => $http_accept,
-    _http_user_agent         => $http_user_agent,
-    _md                      => $authorise_payment_response->{md},
-    _pares                   => $pares,
-    _shopperip               => $shopperip
-};
-my $response_3d = $pci->authorise_payment_request_3d($request_3d);
-cmp_deeply(
-    $response_3d,
-    {
-        'pspreference'  => re('^\d+$'),
-        'resultcode'    => 'Authorised',
-        'authcode'      => re('^\d+$')
-    },
-    'Authorise_Payment_Request_3D'
-);
 
 # Test 9, Capture_Payment_Request
+my $response_3d = authorise();
 my $capture_response = $nonpci->capture_payment_request({
     _psp                     => $merchant_account->{psp},
     _merchantaccount         => $merchant_account->{merchantaccount},
@@ -207,6 +213,29 @@ cmp_deeply(
     },
     'Capture_Payment_Request'
 );
+
+
+
+
+# Test 10, Cancel_Payment_Request
+$response_3d = authorise();
+my $cancel_response = $nonpci->cancel_payment_request({
+    _psp                     => $merchant_account->{psp},
+    _merchantaccount         => $merchant_account->{merchantaccount},
+    _url                     => $merchant_account->{url},
+    _username                => $merchant_account->{username},
+    _password                => $merchant_account->{password},
+    _pspreference            => $response_3d->{pspreference}
+});
+cmp_deeply(
+    $cancel_response,
+    {
+        'pspreference'  => re('^\d+$'),
+        'response'      => '[cancel-received]'
+    },
+    'Cancel_Payment_Request'
+);
+
 
 $dbh->rollback;
 $dbh_pci->rollback;
