@@ -10,7 +10,6 @@ _XML xml
 DECLARE
 _ xml[];
 _BasePath text;
-_PaymentResult xml;
 _NSArray text[];
 BEGIN
 _NSArray := ARRAY[
