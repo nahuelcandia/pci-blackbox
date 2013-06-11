@@ -60,44 +60,49 @@ cmp_deeply(
 
 
 
-# Test 2, Encrypt_Card
-my $encrypted_card = $pci->encrypt_card({
-    _cardnumber      => $cardnumber,
-    _cardexpirymonth => $cardexpirymonth,
-    _cardexpiryyear  => $cardexpiryyear,
-    _cardholdername  => $cardholdername,
-    _cardissuenumber => undef,
-    _cardstartmonth  => undef,
-    _cardstartyear   => undef,
-    _cardcvc         => $cardcvc
-});
-cmp_deeply(
-    $encrypted_card,
-    {
-        cardnumberreference => re('^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$'),
-        cardkey             => re('^[0-9a-f]{64}$'),
-        cardbin             => re('^[0-9]{6}$'),
-        cardlast4           => re('^[0-9]{4}$'),
-        cvckey              => re('^[0-9a-f]{64}$')
-    },
-    'Encrypt_Card'
-);
-
-
-
-# Test 3, Store_Card_Key
-my $cardid = $nonpci->store_card_key({
-    _cardnumberreference => $encrypted_card->{cardnumberreference},
-    _cardkey             => $encrypted_card->{cardkey},
-    _cardbin             => $encrypted_card->{cardbin},
-    _cardlast4           => $encrypted_card->{cardlast4}
-});
-cmp_ok($cardid,'>=',1,"Store_Card_Key");
 
 sub authorise {
 
     $reference               = rand();
     $shopperreference        = rand();
+
+    # Test 2, Encrypt_Card
+    my $encrypted_card = $pci->encrypt_card({
+        _cardnumber      => $cardnumber,
+        _cardexpirymonth => $cardexpirymonth,
+        _cardexpiryyear  => $cardexpiryyear,
+        _cardholdername  => $cardholdername,
+        _cardissuenumber => undef,
+        _cardstartmonth  => undef,
+        _cardstartyear   => undef,
+        _cardcvc         => $cardcvc
+    });
+    cmp_deeply(
+        $encrypted_card,
+        {
+            cardnumberreference => re('^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$'),
+            cardkey             => re('^[0-9a-f]{64}$'),
+            cardbin             => re('^[0-9]{6}$'),
+            cardlast4           => re('^[0-9]{4}$'),
+            cvckey              => re('^[0-9a-f]{64}$')
+        },
+        'Encrypt_Card'
+    );
+
+
+
+
+    # Test 3, Store_Card_Key
+    my $cardid = $nonpci->store_card_key({
+        _cardnumberreference => $encrypted_card->{cardnumberreference},
+        _cardkey             => $encrypted_card->{cardkey},
+        _cardbin             => $encrypted_card->{cardbin},
+        _cardlast4           => $encrypted_card->{cardlast4}
+    });
+    cmp_ok($cardid,'>=',1,"Store_Card_Key");
+
+
+
 
     # Test 4, Authorise_Payment_Request
     my $request = {
@@ -195,7 +200,6 @@ sub authorise {
 
 
 
-
 # Test 9, Capture_Payment_Request
 my $response_3d = authorise();
 my $capture_response = $nonpci->capture_payment_request({
@@ -216,6 +220,7 @@ cmp_deeply(
     },
     'Capture_Payment_Request'
 );
+
 
 
 

@@ -16,6 +16,13 @@ _CVCData := decode(memcache_get(encode(_CVCKeyHash,'hex')),'hex');
 PERFORM memcache_delete(encode(_CVCKeyHash,'hex'));
 
 CardCVC := pgp_sym_decrypt(_CVCData,_CVCKey);
+
+IF CardCVC ~ '^[0-9]{3}$' THEN
+    -- OK
+ELSE
+    RAISE EXCEPTION 'ERROR_INVALID_CVC_KEY';
+END IF;
+
 RETURN;
 END;
 $BODY$ LANGUAGE plpgsql VOLATILE;
