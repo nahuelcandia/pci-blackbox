@@ -3,8 +3,6 @@ _MerchantAccount text,
 _URL text,
 _Username text,
 _Password text,
-_CurrencyCode char(3),
-_PaymentAmount numeric,
 _PSPReference text
 ) RETURNS xml AS $BODY$
 DECLARE
