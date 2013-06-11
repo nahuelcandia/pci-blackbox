@@ -134,7 +134,7 @@ sub authorise {
     my $response_3d = $nonpci->authorise_3d($request_3d);
     like($response_3d, qr/^http/, 'Authorise_3D');
 
-    return authorise_request;
+    return $authorise_request;
 }
 
 
