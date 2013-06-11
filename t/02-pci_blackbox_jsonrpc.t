@@ -140,7 +140,7 @@ sub authorise {
 
 
 # Test 7, Capture
-$authorise_request = authorise();
+my $authorise_request = authorise();
 my $request_capture = {
     authoriserequestid => $authorise_request->{authoriserequestid}
 };
