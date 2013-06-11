@@ -11,7 +11,7 @@ use JSON qw(from_json to_json);
 use DBI;
 use DBIx::Pg::CallFunction;
 
-plan tests => 14;
+plan tests => 15;
 
 my $nonpci = JSON::RPC::Simple::Client->new('https://localhost:30001/nonpci');
 my $pci    = JSON::RPC::Simple::Client->new('https://localhost:30002/pci');
@@ -148,12 +148,14 @@ ok($nonpci->capture($request_capture), 'Capture');
 
 
 
-# Test 8, Cancel
+# Test 8, Refund
+ok($nonpci->capture($request_capture), 'Refund');
+
+
+
+# Test 9, Cancel
 $authorise_request = authorise();
 my $request_cancel = {
     authoriserequestid => $authorise_request->{authoriserequestid}
 };
 ok($nonpci->cancel($request_cancel), 'Cancel');
-
-
-

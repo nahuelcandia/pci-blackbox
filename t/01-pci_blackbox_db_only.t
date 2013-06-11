@@ -11,7 +11,7 @@ use Data::Dumper;
 use LWP::UserAgent;
 use File::Slurp qw(write_file);
 
-plan tests => 17;
+plan tests => 18;
 
 # Connect to the isolated PCI compliant pci-blackbox
 my $dbh_pci = DBI->connect("dbi:Pg:dbname=pci", '', '', {pg_enable_utf8 => 1, PrintError => 0});
@@ -222,9 +222,29 @@ cmp_deeply(
 );
 
 
+# Test 10, Refund_Payment_Request
+my $refund_response = $nonpci->refund_payment_request({
+    _psp                     => $merchant_account->{psp},
+    _merchantaccount         => $merchant_account->{merchantaccount},
+    _url                     => $merchant_account->{url},
+    _username                => $merchant_account->{username},
+    _password                => $merchant_account->{password},
+    _currencycode            => $currencycode,
+    _paymentamount           => $paymentamount,
+    _pspreference            => $response_3d->{pspreference}
+});
+cmp_deeply(
+    $refund_response,
+    {
+        'pspreference'  => re('^\d+$'),
+        'response'      => '[refund-received]'
+    },
+    'Refund_Payment_Request'
+);
 
 
-# Test 10, Cancel_Payment_Request
+
+# Test 11, Cancel_Payment_Request
 $response_3d = authorise();
 my $cancel_response = $nonpci->cancel_payment_request({
     _psp                     => $merchant_account->{psp},
