@@ -1,0 +1,1 @@
+INSERT INTO MerchantAccounts (PSP, MerchantAccount, URL, Username, Password, PCIBlackBoxURL) VALUES ('Adyen', 'TrustlyCOM', 'https://pal-test.adyen.com/pal/servlet/soap/Payment', 'ws@Company.TrustlyGroupAB', 'Lbzdnp[JD)@zVBp!w(2gQ4SH6', 'https://localhost:30002/pci');
