@@ -96,6 +96,9 @@ cmp_ok($cardid,'>=',1,"Store_Card_Key");
 
 sub authorise {
 
+    $reference               = rand();
+    $shopperreference        = rand();
+
     # Test 4, Authorise_Payment_Request
     my $request = {
         _cardkey                 => $encrypted_card->{cardkey},
@@ -213,7 +216,6 @@ cmp_deeply(
     },
     'Capture_Payment_Request'
 );
-
 
 
 
