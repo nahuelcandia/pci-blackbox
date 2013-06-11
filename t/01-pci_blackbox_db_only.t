@@ -203,7 +203,7 @@ cmp_deeply(
     $capture_response,
     {
         'pspreference'  => re('^\d+$'),
-        'response'      => re('^.*$')
+        'response'      => '[capture-received]'
     },
     'Capture_Payment_Request'
 );
