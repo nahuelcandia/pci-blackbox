@@ -18,6 +18,8 @@ $ch->setopt(CURLOPT_PASSWORD,$password);
 $ch->setopt(CURLOPT_POST,1);
 $ch->setopt(CURLOPT_NOPROGRESS,0);
 $ch->setopt(CURLOPT_POSTFIELDS,$xml);
+$ch->setopt(CURLOPT_CONNECTTIMEOUT,10);
+$ch->setopt(CURLOPT_TIMEOUT,10);
 $ch->setopt(CURLOPT_SSL_VERIFYPEER,1);
 $ch->setopt(CURLOPT_SSL_VERIFYHOST,2);
 
