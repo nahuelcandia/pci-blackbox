@@ -30,15 +30,7 @@ my $app = sub {
 
     my ($method, $params, $id, $version, $jsonrpc);
 
-    if ($env->{REQUEST_METHOD} eq 'GET') {
-        my $req = Plack::Request->new($env);
-        $method = $req->path_info;
-        $method =~ s{^.*/}{};
-        $params = $req->parameters->mixed;
-        foreach my $k (keys %{$params}) {
-            $params->{$k} = undef if $params->{$k} eq '';
-        }
-    } elsif (
+    if (
         $env->{REQUEST_METHOD} eq 'POST' &&
         $env->{HTTP_ACCEPT} =~ m'application/json' &&
         $env->{CONTENT_TYPE} =~ m!^application/json!
