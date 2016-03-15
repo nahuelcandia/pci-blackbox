@@ -54,4 +54,4 @@ return $r;
 $BODY$ LANGUAGE plperlu VOLATILE SECURITY DEFINER;
 
 REVOKE ALL ON FUNCTION Authorise_Payment_Request_JSON_RPC(_PCIBlackBoxURL text, _CardKey text, _CVCKey text, _PSP text, _MerchantAccount text, _URL text, _Username text, _Password text, _CurrencyCode char(3), _PaymentAmount numeric, _Reference text, _ShopperIP inet, _ShopperEmail text, _ShopperReference text, _HTTP_ACCEPT text, _HTTP_USER_AGENT text) FROM PUBLIC;
-GRANT  ALL ON FUNCTION Authorise_Payment_Request_JSON_RPC(_PCIBlackBoxURL text, _CardKey text, _CVCKey text, _PSP text, _MerchantAccount text, _URL text, _Username text, _Password text, _CurrencyCode char(3), _PaymentAmount numeric, _Reference text, _ShopperIP inet, _ShopperEmail text, _ShopperReference text, _HTTP_ACCEPT text, _HTTP_USER_AGENT text) TO GROUP nonpci;
+GRANT  ALL ON FUNCTION Authorise_Payment_Request_JSON_RPC(_PCIBlackBoxURL text, _CardKey text, _CVCKey text, _PSP text, _MerchantAccount text, _URL text, _Username text, _Password text, _CurrencyCode char(3), _PaymentAmount numeric, _Reference text, _ShopperIP inet, _ShopperEmail text, _ShopperReference text, _HTTP_ACCEPT text, _HTTP_USER_AGENT text) TO GROUP nonpci_api;

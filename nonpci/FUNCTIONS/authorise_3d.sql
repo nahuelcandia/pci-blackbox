@@ -64,4 +64,4 @@ END;
 $BODY$ LANGUAGE plpgsql VOLATILE SECURITY DEFINER;
 
 REVOKE ALL ON FUNCTION Authorise_3D(_AuthoriseRequestID uuid, _MD text, _PaRes text, _REMOTE_ADDR inet, _HTTP_USER_AGENT text, _HTTP_ACCEPT text) FROM PUBLIC;
-GRANT  ALL ON FUNCTION Authorise_3D(_AuthoriseRequestID uuid, _MD text, _PaRes text, _REMOTE_ADDR inet, _HTTP_USER_AGENT text, _HTTP_ACCEPT text) TO GROUP nonpci;
+GRANT  ALL ON FUNCTION Authorise_3D(_AuthoriseRequestID uuid, _MD text, _PaRes text, _REMOTE_ADDR inet, _HTTP_USER_AGENT text, _HTTP_ACCEPT text) TO GROUP nonpci_api;

@@ -44,4 +44,4 @@ END;
 $BODY$ LANGUAGE plpgsql VOLATILE SECURITY DEFINER;
 
 REVOKE ALL ON FUNCTION Cancel_Payment_Request(_PSP text, _MerchantAccount text, _URL text, _Username text, _Password text, _PSPReference text) FROM PUBLIC;
-GRANT  ALL ON FUNCTION Cancel_Payment_Request(_PSP text, _MerchantAccount text, _URL text, _Username text, _Password text, _PSPReference text) TO GROUP nonpci;
+GRANT  ALL ON FUNCTION Cancel_Payment_Request(_PSP text, _MerchantAccount text, _URL text, _Username text, _Password text, _PSPReference text) TO GROUP nonpci_api;

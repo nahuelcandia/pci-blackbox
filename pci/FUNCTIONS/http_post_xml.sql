@@ -38,3 +38,5 @@ if ($retcode == 0) {
 return $response_body;
 $BODY$ LANGUAGE plperlu;
 
+REVOKE ALL ON FUNCTION HTTP_POST_XML(_URL text, _Username text, _Password text, _XML xml) FROM PUBLIC;
+GRANT  ALL ON FUNCTION HTTP_POST_XML(_URL text, _Username text, _Password text, _XML xml) TO GROUP pci;

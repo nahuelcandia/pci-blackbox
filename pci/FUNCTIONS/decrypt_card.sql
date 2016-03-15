@@ -41,3 +41,6 @@ FROM Card_From_JSON(_CardJSON);
 RETURN;
 END;
 $BODY$ LANGUAGE plpgsql VOLATILE;
+
+REVOKE ALL ON FUNCTION Decrypt_Card(_CardKey text) FROM PUBLIC;
+GRANT  ALL ON FUNCTION Decrypt_Card(_CardKey text) TO GROUP pci_api;

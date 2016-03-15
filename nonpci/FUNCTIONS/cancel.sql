@@ -58,4 +58,4 @@ END;
 $BODY$ LANGUAGE plpgsql VOLATILE SECURITY DEFINER;
 
 REVOKE ALL ON FUNCTION Cancel(_AuthoriseRequestID uuid) FROM PUBLIC;
-GRANT  ALL ON FUNCTION Cancel(_AuthoriseRequestID uuid) TO GROUP nonpci;
+GRANT  ALL ON FUNCTION Cancel(_AuthoriseRequestID uuid) TO GROUP nonpci_api;

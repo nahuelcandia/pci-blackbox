@@ -54,3 +54,6 @@ RETURN xmlelement(
 );
 END;
 $BODY$ LANGUAGE plpgsql;
+
+REVOKE ALL ON FUNCTION Format_Adyen_Capture_Request(_MerchantAccount text, _URL text, _Username text, _Password text, _CurrencyCode char(3), _PaymentAmount numeric, _PSPReference text) FROM PUBLIC;
+GRANT  ALL ON FUNCTION Format_Adyen_Capture_Request(_MerchantAccount text, _URL text, _Username text, _Password text, _CurrencyCode char(3), _PaymentAmount numeric, _PSPReference text) TO GROUP nonpci_api;

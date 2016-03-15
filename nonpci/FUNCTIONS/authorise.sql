@@ -97,4 +97,4 @@ END;
 $BODY$ LANGUAGE plpgsql VOLATILE SECURITY DEFINER;
 
 REVOKE ALL ON FUNCTION Authorise(_OrderID text, _CurrencyCode char(3), _PaymentAmount numeric, _CardNumberReference uuid, _CardKey text, _CardBIN char(6), _CardLast4 char(4), _CVCKey text, _REMOTE_ADDR inet, _HTTP_USER_AGENT text, _HTTP_ACCEPT text) FROM PUBLIC;
-GRANT  ALL ON FUNCTION Authorise(_OrderID text, _CurrencyCode char(3), _PaymentAmount numeric, _CardNumberReference uuid, _CardKey text, _CardBIN char(6), _CardLast4 char(4), _CVCKey text, _REMOTE_ADDR inet, _HTTP_USER_AGENT text, _HTTP_ACCEPT text) TO GROUP nonpci;
+GRANT  ALL ON FUNCTION Authorise(_OrderID text, _CurrencyCode char(3), _PaymentAmount numeric, _CardNumberReference uuid, _CardKey text, _CardBIN char(6), _CardLast4 char(4), _CVCKey text, _REMOTE_ADDR inet, _HTTP_USER_AGENT text, _HTTP_ACCEPT text) TO GROUP nonpci_api;
