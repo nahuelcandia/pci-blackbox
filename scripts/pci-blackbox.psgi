@@ -22,7 +22,7 @@ my $app = sub {
             jsonrpc => '2.0',
             error => {
                 code => -32600,
-                message => "Invalid Request. Got: REQUEST_METHOD: $env->{REQUEST_METHOD}, HTTP_ACCEPT: $env->{HTTP_ACCEPT}, CONTENT_TYPE: $env->{CONTENT_TYPE}"
+                message => "Invalid Request. Got: REQUEST_METHOD: " . (defined($env->{REQUEST_METHOD}) ? $env->{REQUEST_METHOD} : '') . ", HTTP_ACCEPT: " . (defined($env->{HTTP_ACCEPT}) ? $env->{HTTP_ACCEPT} : '') . ", CONTENT_TYPE: " . (defined($env->{CONTENT_TYPE}) ? $env->{CONTENT_TYPE} : '')
             },
             id => undef
         }, {pretty => 1}) ]
