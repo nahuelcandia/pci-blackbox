@@ -80,6 +80,10 @@ my $app = sub {
     }
     my ($namespace, $function_name) = ($1, $2);
 
+    unless ($function_name =~ '^(encrypt_cvc|encrypt_card|authorise_payment_request_3d|authorise_payment_request|store_card_key|refund_payment_request|refund|get_merchant_account|capture_payment_request|capture|cancel_payment_request|cancel|authorise_payment_request_json_rpc|authorise_payment_request_3d_json_rpc|authorise_3d|authorise)$') {
+        return $invalid_request;
+    }
+
     if ($function_name =~ m/^(authorise|authorise_3d)$/ && !defined $namespace) {
         foreach my $k ('REMOTE_ADDR','HTTP_USER_AGENT','HTTP_ACCEPT') {
             $params->{lc($k)} = $env->{$k};
