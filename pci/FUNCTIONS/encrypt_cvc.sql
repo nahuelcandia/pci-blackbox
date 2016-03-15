@@ -9,7 +9,7 @@ _OK boolean;
 _Expire interval := '10 minutes'::interval;
 BEGIN
 
-IF _CardCVC ~ '^[0-9]{3}$' THEN
+IF _CardCVC ~ '^[0-9]{3,4}$' THEN
     -- OK
 ELSE
     RAISE EXCEPTION 'ERROR_INVALID_INPUT';

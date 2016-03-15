@@ -17,7 +17,7 @@ PERFORM memcache_delete(encode(_CVCKeyHash,'hex'));
 
 CardCVC := pgp_sym_decrypt(_CVCData,_CVCKey);
 
-IF CardCVC ~ '^[0-9]{3}$' THEN
+IF CardCVC ~ '^[0-9]{3,4}$' THEN
     -- OK
 ELSE
     RAISE EXCEPTION 'ERROR_INVALID_CVC_KEY';
